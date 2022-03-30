@@ -1,0 +1,69 @@
+﻿@model List<WebApplication.Models.Arac>
+@{
+    ViewBag.Title = "";
+
+}
+
+<style type="text/css">
+    #map {
+        height: 96%;
+        width: 80%;
+        float: left;
+    }
+
+    #formm {
+        height: 100%;
+        width: 20%;
+        float: right;
+        padding: 30px;
+    }
+
+    html,
+    body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+</style>
+@using (Html.BeginForm())
+{
+    <br>
+    <div id="formm">
+
+        <input type="text" name="Tarih1" class="form-control" value="@DateTime.Now.AddHours(-1)" />
+        <br>
+        <input type="text" name="Tarih2" class="form-control" value="@DateTime.Now" />
+        <br>
+        <input type="text" name="arac_id" class="form-control" placeholder="Id Giriniz" />
+        <br>
+        <button id="btn-Getir">Getir</button>
+
+
+
+    </div>}
+<div id="map"></div>
+<script>
+    var map;
+    const labels = "123456789";
+    function initMap() {
+        var merkez = { lat: 59.341778, lng: 18.045613 };
+        map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 10,
+            center: merkez,
+            mapTypeId:'roadmap',
+            disableDefaultUI: true
+        });
+        @foreach (var arac in Model)
+{
+    @: var marker = new google.maps.Marker({ position: { lat: @arac.konumX.ToString().Replace(",",".") , lng: @arac.konumY.ToString().Replace(",", ".") }, map: map, label: labels[@arac.aracID-1] });
+
+        }
+
+
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=YOURAPIKEY&callback=initMap&libraries=&v=weekly"
+        async></script>
+
+
+<!-- Async script executes immediately and must be after any DOM elements used in callback. -->
